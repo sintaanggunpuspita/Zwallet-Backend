@@ -1,10 +1,10 @@
 const connection = require('../configs/db')
 
-const history = {
-    inserthistory: (data) => {
+const transfer = {
+    inserttransfer: (data) => {
         console.log(data)
         return new Promise((resolve, reject) => {
-            connection.query('INSERT INTO history SET ?', data, (err, result) => {
+            connection.query('INSERT INTO transfer SET ?', data, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -13,9 +13,9 @@ const history = {
             })
         })
     },
-    getAllhistory: () => {
+    getAlltransfer: () => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM history ORDER BY id DESC', (err, result) => {
+            connection.query('SELECT * FROM transfer ORDER BY date DESC', (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -24,9 +24,9 @@ const history = {
             })
         })
     },
-    gethistoryById: (id) => {
+    gettransferById: (id) => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM history where id = ?', id, (err, result) => {
+            connection.query('SELECT * FROM transfer where id = ?', id, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -35,9 +35,9 @@ const history = {
             })
         })
     },
-    updatehistory: (id, data) => {
+    updatetransfer: (id, data) => {
         return new Promise((resolve, reject) => {
-            connection.query('UPDATE history SET ? WHERE id = ?', [data, id], (err, result) => {
+            connection.query('UPDATE transfer SET ? WHERE id = ?', [data, id], (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -46,9 +46,9 @@ const history = {
             })
         })
     },
-    deletehistory: (id) => {
+    deletetransfer: (id) => {
         return new Promise((resolve, reject) => {
-            connection.query('DELETE FROM history WHERE id = ?', id, (err, result) => {
+            connection.query('DELETE FROM transfer WHERE id = ?', id, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -59,4 +59,4 @@ const history = {
     }
 }
 
-module.exports = history
+module.exports = transfer

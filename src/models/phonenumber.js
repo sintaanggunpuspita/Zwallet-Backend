@@ -1,10 +1,10 @@
 const connection = require('../configs/db')
 
-const phone = {
-    insertphone: (data) => {
+const phonenumber = {
+    insertphonenumber: (data) => {
         console.log(data)
         return new Promise((resolve, reject) => {
-            connection.query('INSERT INTO phone SET ?', data, (err, result) => {
+            connection.query('INSERT INTO phone_number SET ?', data, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -15,7 +15,7 @@ const phone = {
     },
     getAllphone: () => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM phone', (err, result) => {
+            connection.query('SELECT * FROM phonenumber ORDER BY date DESC', (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -24,9 +24,9 @@ const phone = {
             })
         })
     },
-    getphoneById: (id) => {
+    getAllphonenumber: () => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM phone where id = ?', id, (err, result) => {
+            connection.query('SELECT * FROM phonenumber', (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -35,9 +35,9 @@ const phone = {
             })
         })
     },
-    updatephone: (id, data) => {
+    getphonenumberById: (id) => {
         return new Promise((resolve, reject) => {
-            connection.query('UPDATE phone SET ? WHERE id = ?', [data, id], (err, result) => {
+            connection.query('SELECT * FROM phone_number where id = ?', id, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -46,9 +46,20 @@ const phone = {
             })
         })
     },
-    deletephone: (id) => {
+    updatephonenumber: (id, data) => {
         return new Promise((resolve, reject) => {
-            connection.query('DELETE FROM phone WHERE id = ?', id, (err, result) => {
+            connection.query('UPDATE phone_number SET ? WHERE id = ?', [data, id], (err, result) => {
+                if (!err) {
+                    resolve(result)
+                } else {
+                    reject(new Error(err))
+                }
+            })
+        })
+    },
+    deletephonenumber: (id) => {
+        return new Promise((resolve, reject) => {
+            connection.query('DELETE FROM phone_number WHERE id = ?', id, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -59,4 +70,4 @@ const phone = {
     }
 }
 
-module.exports = phone
+module.exports = phonenumber
