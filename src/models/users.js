@@ -13,7 +13,7 @@ const users = {
     })
   },
   insertUsers: (data) => {
-    console.log(data)
+    // console.log(data)
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO users SET ?', data, (err, result) => {
         if (!err) {

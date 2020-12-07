@@ -1,19 +1,20 @@
 const redis = require('redis')
-const client = redis.createClient()
-const helper = require('../helpers/helpers')
+const client = redis.createClient(6379)
+const {response} = require('../helpers/helpers')
 module.exports = {
     cacheGetAllUsers: (req, res, next) => {
-        client.get('getallusers', (err, data) => {
-            if (err) throw err
+        client.get('getallUsers', (err, data) => {
+            // if (err) throw err
             if (data !== null) {
-                helper.response(res, JSON.parse(data), 200)
+                const result = JSON.parse(data)
+            return response(res, result,200, null)
             } else {
                 next()
             }
         })
     },
     clearGetAllusers: (req, res, next) => {
-        client.del('getallusers')
+        client.del('getallUsers')
         next()
     }
 }

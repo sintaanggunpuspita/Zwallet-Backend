@@ -1,34 +1,48 @@
 const usersModel = require('../models/users')
 const helper = require('../helpers/helpers')
+const {sendEmail} = require('../helpers/email')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { v4: uuidv4 } = require('uuid');
+// const { v4: uuidv4 } = require('uuid');
+const redis = require("redis");
+const client = redis.createClient(6379);
 
 const users = {
   registerUsers: (req, res) => {
     console.log('register controller')
-    const id = uuidv4()
+    // const id = uuidv4()
     const {
+      role_Id,
+      firstName,
+      lastName,
+      username,
+      phone,
       email,
       password,
-      username
+      pin,
+      balance
     } = req.body
 
     usersModel.checkUser(email)
       .then((result) => {
         console.log()
         if (result.length > 0) return helper.response(res, null, 401, { error: 'email sudah ada' })
-
         bcrypt.genSalt(10, function (err, salt) {
           bcrypt.hash(password, salt, function (err, hash) {
             const data = {
-              id,
+              role_Id,
+              firstName,
+              lastName,
+              username,
+              phone,
               email,
-              password: hash,
-              username
+              image: `http://localhost:5000/upload/${req.file.filename}`,
+              password:hash,
+              pin,
+              balance
             }
             usersModel.insertUsers(data)
-              .then((result) => {
+              .then(() => {
                 return helper.response(res, { message: 'register berhasil' }, 201, null)
               })
           });
@@ -50,39 +64,53 @@ const users = {
           });
         });
       })
-
   },
-
-  insertUsers: (req, res, next) => {
-    const { firstName, lastName, username, phone, email, image, password, pin, balance } = req.body
-    const salt = bcrypt.genSaltSync(10)
-    const hashpassword = bcrypt.hashSync(password,salt)
-    usersModel.insertUsers({
-      firstName,
-      lastName,
-      username,
-      phone,
-      email,
-      image: `http://localhost:5000/upload/${req.file.filename}`,
-      password:hashpassword,
-      pin,
-      balance
-    })
-      .then(result => {
-        const resultUsers = result
-        // eror handling
-        if (resultUsers.affectedRows === 0) {
-          const err = new Error('cant add data')
-          err.status = 404
-          return next(err)
-        } else {
-          helper.response(res, { message: 'successfull add data' }, 200, null)
-        }
+    sendEmail : (req, res) => {
+    const email = req.body.email
+    const message = req.body.message
+    sendEmail(email, message)
+      .then(() => {
+        // console.log()
+        // return helper.response(res, { id: res.messageId}, 200, null)
+        return helper.response(res, { message: 'send email success' }, 200, null)
       })
       .catch((err) => {
-        console.log(err)
+        return helper.response(res, null, 500, {
+          message: 'error send email'
+        })
       })
   },
+
+  // insertUsers: (req, res, next) => {
+  //   const { firstName, lastName, username, phone, email, image, password, pin, balance } = req.body
+  //   const salt = bcrypt.genSaltSync(10)
+  //   const hashpassword = bcrypt.hashSync(password,salt)
+  //   usersModel.insertUsers({
+  //     firstName,
+  //     lastName,
+  //     username,
+  //     phone,
+  //     email,
+  //     image: `http://localhost:5000/upload/${req.file.filename}`,
+  //     password:hashpassword,
+  //     pin,
+  //     balance
+  //   })
+  //     .then(result => {
+  //       const resultUsers = result
+  //       // eror handling
+  //       if (resultUsers.affectedRows === 0) {
+  //         const err = new Error('cant add data')
+  //         err.status = 404
+  //         return next(err)
+  //       } else {
+  //         helper.response(res, { message: 'successfull add data' }, 200, null)
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //     })
+  // },
   getAllUsers: (req, res) => {
     const username = req.query.username
     // const sort = req.query.sort
@@ -117,6 +145,7 @@ const users = {
         .then((result) => {
           const resultUsers = result
           // eror handling
+          client.setex("getallUsers", 60 * 60 * 12, JSON.stringify(resultUsers))
           if (resultUsers.length === 0) {
             return helper.response(res, { message: 'cant get data' }, 404, null)
           } else {

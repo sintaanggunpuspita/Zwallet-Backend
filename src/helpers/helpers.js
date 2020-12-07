@@ -8,3 +8,4 @@ module.exports = {
     return res.status(resultPrint.status_code).json(resultPrint)
   }
 }
+
