@@ -5,7 +5,7 @@ const router = express.Router()
 router
   .post('/', transactionController.inserttransaction)
   .get('/', transactionController.getAlltransaction)
-  .get('/transactionhistory', transactionController.getAlltransactionhistory)
+  .get('/transactionhistory/:userId', transactionController.getAlltransactionhistory)
   .get('/:id', transactionController.gettransactionById)
   .patch('/:id', transactionController.updatetransaction)
   .delete('/:id', transactionController.deletetransaction)

@@ -13,9 +13,9 @@ const transfer = {
             })
         })
     },
-    getAlltransfer: () => {
+    getAlltransfer: (data) => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM transfer ORDER BY date DESC', (err, result) => {
+            connection.query('SELECT * FROM transfer where id = ?',  [data], (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {

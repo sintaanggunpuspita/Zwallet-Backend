@@ -13,6 +13,28 @@ const transaction = {
       })
     })
   },
+  updatesendersbalance: (amount, id) => {
+      return new Promise((resolve,reject) => {
+        connection.query('UPDATE users SET  balance = balance - ? WHERE id = ?', [amount, id], (err, result)  => {
+          if (!err) {
+            resolve(result)
+          } else {
+            reject(new Error(err))
+          }
+        })
+      })
+  },
+  updatereceiverbalance: (amount, id) => {
+    return new Promise((resolve, reject) => {
+      connection.query('UPDATE users SET balance = balance + ? WHERE id = ?', [amount, id], (err, result) => {
+        if (!err) {
+          resolve(result)
+        } else {
+          reject(new Error(err))
+        }
+      })
+    })
+  },
   getAlltransaction: () => {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM transaction trans INNER JOIN users u ON (u.id=trans.senderId) INNER JOIN users us ON (us.id=trans.receiverId) ORDER BY date DESC', (err, result) => {
@@ -24,9 +46,9 @@ const transaction = {
       })
     })
   },
-  getAlltransactionhistory: () => {
+  getAlltransactionhistory: (userId) => {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT users.firstName, transaction.amount, transfer.status FROM transaction INNER JOIN users ON transaction.senderId = users.id INNER JOIN transfer ON transaction.senderId = transfer.id_delivery_transactions', (err, result) => {
+      connection.query('SELECT users.firstName, users.lastName, users.image, transaction.amount FROM transaction INNER JOIN users ON transaction.receiverId = users.id WHERE transaction.senderId = ?', userId, (err, result) => {
         if (!err) {
           resolve(result)
         } else {

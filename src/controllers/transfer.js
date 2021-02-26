@@ -3,47 +3,36 @@ const helper = require('../helpers/helpers')
 
 const transfer = {
     inserttransfer: (req, res) => {
-        const { delivery_transactions, receiver_transactions } = req.body
+        const { id_delivery_transactions, id_receiver_transactions, status } = req.body
         const data = {
-            delivery_transactions,
-            receiver_transactions
+            id_delivery_transactions,
+            id_receiver_transactions,
+            status
         }
-        const id = req.params.id
-        transferModels.getTransferById(id)
-        .then((result) => {
-        if (result != '') {
-          helpers.response(res, null, result, 200, null)
-        } else {
-          helpers.response(res, null, 'History not found', 404, 'Error')
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      })
         transferModel.inserttransfer(data)
-         .then((result) => {
-                const resulttransfer = result
-                console.log(result)
-                if (resulttransfer.affectedRows === 0) {
-                    return helper.response(res, { message: 'cant add data' }, 404, null)
-                } else {
-                    helper.response(res, { message: 'successfull add data' }, 200, null)
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+        .then((result) => {
+          const resulttransfer = result
+          console.log(result)
+          if (resulttransfer.affectedRows === 0) {
+            return helper.response(res, { message: 'cant add data' }, 404, null)
+          } else {
+            helper.response(res, { message: 'successfull add data' }, 200, null)
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
     getAlltransfer: (req, res) => {
         transferModel.getAlltransfer()
             .then((result) => {
                 const resulttransfer = result
                 // error handling
-                if (resulttransfer.length === 0) {
-                    helper.response(res, { message: 'cant search name' }, 404, null)
-                } else {
-                    helper.response(res, resulttransfer, 200, null)
-                }
+                if (resulttransfer.affectedRows === 0) {
+                    return helper.response(res, { message: 'cant add data' }, 404, null)
+                  } else {
+                    helper.response(res, { message: 'successfull add data' }, 200, null)
+                  }
             })
             .catch((err) => {
                 console.log(err)

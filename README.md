@@ -1,39 +1,65 @@
-# zwalletapp_beginner_backend
+# zwallet_backend
 
-Zwallet - BackEnd
-Simple application to CRUD database with node js, Express, and MySql. This application use JWT to authentication and authorization.
+Zwallet Backend is a Rest API for PosApp Frontend. 
+Simple application to CRUD database with NodeJS, Express, and MySql.
+This application use JWT to authentication and authorization.
 
-Table of Contents
-.Requirements
-.Setup .env example
-.Run the app
-.REST API
+## Table of Contents
 
-General info
-.This project is simple CRUD data
+- [PosApp-BackEnd](#foodapp-backend)
+  - [General info](#general-info)
+  - [Built With](#built-with)
+  - [Requirements](#requirements)
+  - [Setup](#setup)
+  - [Setup .env example](#setup-env-example)
+  - [Run the app](#run-the-app)
+  - [REST API](#rest-api)
+  
+## General info
+This project is simple CRUD data
+## Built With
+* [Node.js](https://nodejs.org/en/)
+* [Express.js](https://expressjs.com/)
 
-Built With
-.Node.js
-.Express.js
+## Requirements
+* [Node.js](https://nodejs.org/en/)
+* [Postman](https://www.getpostman.com/) for testing
+* [Database](database-example.sql)
+	
+## Setup
+To run this project, install it locally using npm:
 
-Requirements
-.Node.js
-.Postman for testing
-.Database
+```
+$ npm install
+```
 
-Setup .env example
+## Setup .env example
+
 Create .env file in your root project folder.
-PORT = 5000
+
+```env
 DB_HOST = localhost
-DB_NAME = db_zwalletapp
 DB_USER = root
-DB_PASSWORD = 
+DB_PASSWORD = your_password
+DB_DATABASE = your_database
+PORT = 8000
+BASE_URL = http://localhost:8000/
+SECRET_KEY = your-secret
+```
+## Run the app
 
-RUN the app
+Development mode
 
+```bash
 $ npm run dev
+```
 
-REST API
+Deploy mode
 
-postman
+```bash
+$ npm start
+```
 
+## REST API
+
+You can view my Postman collection [here](https://documenter.getpostman.com/view/5773671/TVK5eN5F)

@@ -3,12 +3,9 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 const app = express()
+const routersindex = require('./src/routers/index')
 // const router = express.Router()
 const PORT = process.env.PORT
-const routerUsers = require('./src/routers/users')
-const routerTransaction = require('./src/routers/transaction')
-const routerTransfer = require('./src/routers/transfer')
-const routerPhonenumber = require('./src/routers/phonenumber')
 const bodyParser = require('body-parser')
 const helpers = require('./src/helpers/helpers')
 
@@ -36,11 +33,11 @@ app.use(mymiddleware)
 // add cors
 app.use(cors())
 
+//add uploads
+app.use('/upload', express.static('./uploads'))
+
 // menenggukan router
-app.use('/users', routerUsers)
-app.use('/transaction', routerTransaction)
-app.use('/transfer',routerTransfer)
-app.use('/phonenumber',routerPhonenumber)
+app.use('/v1', routersindex)
 
 
 // eror handling

@@ -5,11 +5,10 @@ module.exports = {
         let token = req.headers.authorization
         token = token.split(" ")[1]
         jwt.verify(token, process.env.SECRET_KEY, function (err, decoded) {
-            //req.email = decode.email
             if (err) return helpers.response(res, { message: 'token invalid' }, 403)
             next()
         });
-        req.roleId=decode.roleId
+        req.roleId = decode.roleId
         next
     }
 }

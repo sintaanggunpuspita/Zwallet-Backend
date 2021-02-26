@@ -3,7 +3,7 @@ const transferController = require('../controllers/transfer')
 const router = express.Router()
 
 router
-    .post('/', transferController.inserttransfer)
+    .post('/transfer', transferController.inserttransfer)
     .get('/', transferController.getAlltransfer)
     .get('/:id', transferController.gettransferById)
     .patch('/:id', transferController.updatetransfer)
